@@ -1,23 +1,29 @@
-import { FlashCard } from './flashcard-component.js';
 import { Storage } from './storage.js';
 import { fetchTranslation } from './api.js';
+import { state } from './state.js';
 
-let currentUser = localStorage.getItem('currentUser');
-if (!currentUser) window.location.href = 'login.html';
+
+export function initCards() {
+  const flashcardContainer = document.getElementById('flashcard-container');
+if (!flashcardContainer) return;
+
 
 const welcome = document.getElementById('welcome');
-const flashcardContainer = document.getElementById('flashcard-container');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
 const resetBtn = document.getElementById('reset-btn');
 const translateBtn = document.getElementById('translate-btn');
 const wordInput = document.getElementById('word');
 
-welcome.textContent = `Welcome, ${currentUser}`;
 
-let flashcards = Storage.loadUserData(currentUser);
+welcome.textContent = `Welcome, ${state.user}`;
+
+
+let flashcards = [...state.cards];
 let index = 0;
 
+
+//
 const renderCard = () => {
   flashcardContainer.innerHTML = '';
   if (!flashcards.length) return;
@@ -25,7 +31,7 @@ const renderCard = () => {
   card.data = flashcards[index];
   flashcardContainer.appendChild(card);
 };
-
+  
 prevBtn.addEventListener('click', () => {
   if (!flashcards.length) return;
   index = (index - 1 + flashcards.length) % flashcards.length;
@@ -43,7 +49,8 @@ translateBtn.addEventListener('click', async () => {
   if (!word) return alert('Type a word');
   const translation = await fetchTranslation(word);
   flashcards.push({ word, translation });
-  Storage.saveUserData(currentUser, flashcards);
+  state.cards = flashcards;
+  Storage.saveUserData(state.user, flashcards);
   index = flashcards.length - 1;
   renderCard();
   wordInput.value = '';
@@ -57,11 +64,12 @@ resetBtn.addEventListener('click', async () => {
     const translation = await fetchTranslation(randomWord);
     flashcards.push({ word: randomWord, translation });
   }
-  Storage.saveUserData(currentUser, flashcards);
+  Storage.saveUserData(state.user, flashcards);
   index = 0;
   renderCard();
   alert('Old flashcards removed and new ones loaded!');
 });
 
-// initial render
 renderCard();
+
+}

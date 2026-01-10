@@ -34,7 +34,7 @@ input:focus {
   transform: scale(1.02);
 }
 
-button {
+button, .btn-link {
   background: #3498db;
   color: #fff;
   border: 0;
@@ -66,4 +66,12 @@ flash-card {
   display: flex;
   justify-content: space-between;
   margin-top: 16px;
+}
+
+.quiz-stats {
+  margin: 20px;
+}
+.btn-link {
+  width: 100%;
+  background-color: #20628f;
 }
