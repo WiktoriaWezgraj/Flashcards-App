@@ -18,6 +18,22 @@ export function initQuiz() {
   let quizCards = [...state.cards];
   shuffleArray(quizCards);
 
+  function updateSessionStats(isCorrect) {
+  const stats =
+    JSON.parse(localStorage.getItem('sessionStats')) || {
+      correct: 0,
+      wrong: 0,
+      total: 0
+    };
+
+  stats.total++;
+
+  if (isCorrect) stats.correct++;
+  else stats.wrong++;
+
+  localStorage.setItem('sessionStats', JSON.stringify(stats));
+  }
+
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -44,23 +60,24 @@ export function initQuiz() {
   }
 
   function showEndScreen() {
-    const percent =
-      sessionStats.total === 0
-        ? 0
-        : Math.round((sessionStats.correct / sessionStats.total) * 100);
+  const percent =
+    sessionStats.total === 0
+      ? 0
+      : Math.round((sessionStats.correct / sessionStats.total) * 100);
 
-    quizWord.textContent = 'Koniec quizu :)';
-    quizAnswer.disabled = true;
-    checkBtn.disabled = true;
+  quizWord.textContent = 'Koniec quizu :)';
+  quizAnswer.disabled = true;
+  checkBtn.disabled = true;
 
-    quizResult.style.color = 'black';
-    quizResult.textContent = `
+  quizResult.className = 'quiz-end-result';
+  quizResult.textContent = `
 Wynik tego quizu:
 Poprawne: ${sessionStats.correct}
 Błędne: ${sessionStats.wrong}
 Wynik procentowy: ${percent}%
-    `;
-  }
+  `;
+}
+
 
   checkBtn.addEventListener('click', () => {
     if (!currentQuizCard) return;
@@ -69,24 +86,19 @@ Wynik procentowy: ${percent}%
     if (!answer) return;
 
     sessionStats.total++;
-    state.quiz.total++;
 
     if (answer === currentQuizCard.translation.toLowerCase()) {
       sessionStats.correct++;
-      state.quiz.correct++;
 
       quizResult.textContent = 'Poprawnie!';
       quizResult.style.color = 'green';
     } else {
       sessionStats.wrong++;
-      state.quiz.wrong++;
 
       quizResult.textContent =
         `Źle! Poprawna odpowiedź: ${currentQuizCard.translation}`;
       quizResult.style.color = 'red';
     }
-
-    Storage.saveUserData(state.user, null, state.quiz);
 
     currentIndex++;
     setTimeout(drawQuiz, 600);
