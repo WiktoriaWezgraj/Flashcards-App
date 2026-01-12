@@ -2,74 +2,85 @@ import { Storage } from './storage.js';
 import { fetchTranslation } from './api.js';
 import { state } from './state.js';
 
-
 export function initCards() {
-  const flashcardContainer = document.getElementById('flashcard-container');
-if (!flashcardContainer) return;
+  const container = document.getElementById('flashcard-container');
+  if (!container) return;
 
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const resetBtn = document.getElementById('reset-btn');
+  const translateBtn = document.getElementById('translate-btn');
+  const wordInput = document.getElementById('word');
 
-const welcome = document.getElementById('welcome');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
-const resetBtn = document.getElementById('reset-btn');
-const translateBtn = document.getElementById('translate-btn');
-const wordInput = document.getElementById('word');
+  let index = 0;
+  let flashcards = state.cards;
 
+  function renderCard() {
+    container.innerHTML = '';
+    if (!flashcards.length) return;
 
-welcome.textContent = `Welcome, ${state.user}`;
-
-
-let flashcards = [...state.cards];
-let index = 0;
-
-
-//
-const renderCard = () => {
-  flashcardContainer.innerHTML = '';
-  if (!flashcards.length) return;
-  const card = document.createElement('flash-card');
-  card.data = flashcards[index];
-  flashcardContainer.appendChild(card);
-};
-  
-prevBtn.addEventListener('click', () => {
-  if (!flashcards.length) return;
-  index = (index - 1 + flashcards.length) % flashcards.length;
-  renderCard();
-});
-
-nextBtn.addEventListener('click', () => {
-  if (!flashcards.length) return;
-  index = (index + 1) % flashcards.length;
-  renderCard();
-});
-
-translateBtn.addEventListener('click', async () => {
-  const word = wordInput.value.trim();
-  if (!word) return alert('Type a word');
-  const translation = await fetchTranslation(word);
-  flashcards.push({ word, translation });
-  state.cards = flashcards;
-  Storage.saveUserData(state.user, flashcards);
-  index = flashcards.length - 1;
-  renderCard();
-  wordInput.value = '';
-});
-
-resetBtn.addEventListener('click', async () => {
-  const randomWords = ['apple', 'book', 'house', 'sun', 'car', 'cat', 'dog', 'tree', 'water', 'school'];
-  flashcards = [];
-  for (let i = 0; i < 5; i++) {
-    const randomWord = randomWords[Math.floor(Math.random() * randomWords.length)];
-    const translation = await fetchTranslation(randomWord);
-    flashcards.push({ word: randomWord, translation });
+    const card = document.createElement('flash-card');
+    card.data = flashcards[index];
+    container.appendChild(card);
   }
-  Storage.saveUserData(state.user, flashcards);
-  index = 0;
+
+  prevBtn?.addEventListener('click', () => {
+    if (!flashcards.length) return;
+    index = (index - 1 + flashcards.length) % flashcards.length;
+    renderCard();
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    if (!flashcards.length) return;
+    index = (index + 1) % flashcards.length;
+    renderCard();
+  });
+
+  translateBtn?.addEventListener('click', async () => {
+    const word = wordInput.value.trim().toLowerCase();
+    if (!word) return alert('Wpisz słowo');
+
+    const exists = flashcards.some(c => c.word === word);
+    if (exists) return alert('To słowo już istnieje');
+
+    const translation = await fetchTranslation(word);
+    flashcards.push({ word, translation });
+
+    Storage.saveUserData(state.user, flashcards);
+    index = flashcards.length - 1;
+    renderCard();
+    wordInput.value = '';
+  });
+
+  const randomWords = [
+    'apple','book','house','sun','car',
+    'cat','dog','tree','water','school'
+  ];
+
+  function getRandomUnique(arr, count) {
+    const copy = [...arr];
+    const result = [];
+    while (result.length < count && copy.length) {
+      const i = Math.floor(Math.random() * copy.length);
+      result.push(copy.splice(i, 1)[0]);
+    }
+    return result;
+  }
+
+  resetBtn?.addEventListener('click', async () => {
+    const words = getRandomUnique(randomWords, 5);
+    flashcards = [];
+
+    for (const w of words) {
+      const t = await fetchTranslation(w);
+      flashcards.push({ word: w, translation: t });
+    }
+
+    Storage.saveUserData(state.user, flashcards);
+    index = 0;
+    renderCard();
+    alert('Załadowano nowe fiszki!');
+  });
+
   renderCard();
-  alert('Old flashcards removed and new ones loaded!');
-});
-
-renderCard();
-
 }
