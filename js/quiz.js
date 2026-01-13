@@ -9,7 +9,7 @@ export function initQuiz() {
   const statsBtn = document.getElementById('stats-btn');
   if (!quizWord || !checkBtn) return;
 
-  const TOTAL_QUESTIONS = 10;
+  const TOTAL_QUESTIONS = 5; //ilość dobra do prezentacji
   let currentIndex = 0;
   let currentQuizCard = null;
 

@@ -18,10 +18,10 @@ export function initStats() {
   const percentage = stats.total === 0 ? 0 : Math.round((correct / total) * 100);
 
   statsText.textContent = `
-    Correct: ${correct}
-    Wrong: ${wrong}
-    Answers: ${total}
-    Percentage: ${percentage}%
+    Poprawnie: ${correct}
+    Niepoprawnie: ${wrong}
+    Razem: ${total}
+    Wynik procentowy: ${percentage}%
   `;
 
   if (total === 0) {

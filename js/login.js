@@ -13,26 +13,26 @@ const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(user
 loginBtn.addEventListener('click', () => {
   const username = usernameInput.value.trim();
   const password = passwordInput.value.trim();
-  if (!username || !password) return alert('Enter both fields');
+  if (!username || !password) return alert('Wprowadź dane we wszystkie pola');
 
   const users = getUsers();
   if (users[username] && users[username].password === password) {
     localStorage.setItem('currentUser', username);
     window.location.href = 'index.html';
   } else {
-    alert('Invalid login');
+    alert('Niepoprawny login');
   }
 });
 
 registerBtn.addEventListener('click', () => {
   const username = usernameInput.value.trim();
   const password = passwordInput.value.trim();
-  if (!username || !password) return alert('Enter both fields');
+  if (!username || !password) return alert('Wprowadź dane we wszystkie pola');
 
   const users = getUsers();
-  if (users[username]) return alert('User exists');
+  if (users[username]) return alert('Użytkownik już istnieje');
 
   users[username] = { password, flashcards: [] };
   saveUsers(users);
-  alert('Registered. You can login now.');
+  alert('Zarejestrowano użytkownika. Możesz się zalogować.');
 });
