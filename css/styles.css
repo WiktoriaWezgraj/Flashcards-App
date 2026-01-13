@@ -181,6 +181,8 @@ flash-card {
 /* panel quizu*/
 #quiz,
 #stats {
+  width: 100%;
+  max-width: 740px;
   background: var(--panel);
   backdrop-filter: blur(8px);
   padding: 20px;
@@ -224,5 +226,56 @@ input {
 
 body.dark .quiz-end-result {
   color: #ffffff; 
+}
+
+
+/*wykres*/
+.chart {
+  width: 600px;
+  height: 300px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 20px;
+  background: rgba(255,255,255,0.4);
+}
+
+body.dark .chart {
+  background: rgba(0,0,0,0.25);
+}
+
+.bar {
+  width: 70px;
+  min-height: 0;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-weight: 500;
+  color: white;
+  transition: height 0.4s ease;
+}
+
+.bar.correct {  background: #4aa94d; }
+
+.bar.wrong {  background: #e0544b; }
+
+.bar.total {  background-color: #5c84da; }
+
+.bar.percentage {  background-color: #2d1b69; }
+
+.bar-label {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.bar-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
 }
 

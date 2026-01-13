@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Flashcards</title>
+  <link rel="stylesheet" href="/css/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script></head>
+<body>
+  <div id="app">
+    <h1 id="welcome"></h1>
+
+    <section id="stats">
+        <h3>Statistics</h3>
+        <p id="stats-text"></p>
+        
+        <div class="chart">
+        <div class="bar-wrapper">
+            <div id="bar-correct" class="bar correct" style="height: 0%">0</div>
+            <div class="bar-label">Correct</div>
+        </div>
+        <div class="bar-wrapper">
+            <div id="bar-wrong" class="bar wrong" style="height: 0%">0</div>
+            <div class="bar-label">Wrong</div>
+        </div>
+        <div class="bar-wrapper">
+            <div id="bar-total" class="bar total" style="height: 0%">0</div>
+            <div class="bar-label">Total</div>
+        </div>
+        <div class="bar-wrapper">
+            <div id="bar-percentage" class="bar percentage" style="height: 0%">0</div>
+            <div class="bar-label">Percentage</div>
+        </div>
+    </div>
+    </section>
+
+
+  <script type="module" src="/js/app.js"></script>
+  <script type="module" src="/js/statistics.js"></script>
+</body>
+</html>

@@ -6,7 +6,7 @@ export function initQuiz() {
   const quizAnswer = document.getElementById('quiz-answer');
   const quizResult = document.getElementById('quiz-result');
   const checkBtn = document.getElementById('check-btn');
-
+  const statsBtn = document.getElementById('stats-btn');
   if (!quizWord || !checkBtn) return;
 
   const TOTAL_QUESTIONS = 10;
@@ -76,8 +76,28 @@ Poprawne: ${sessionStats.correct}
 Błędne: ${sessionStats.wrong}
 Wynik procentowy: ${percent}%
   `;
+
+ const user = localStorage.getItem('currentUser');
+  if (!user) return;
+
+  const previous = Storage.loadStats(user);
+
+  const updateStats = {
+    correct: previous.correct + sessionStats.correct,
+    wrong: previous.wrong + sessionStats.wrong,
+    total: previous.total + sessionStats.total
+    };
+
+    Storage.saveUserData(user, null, updateStats);
+
+    if (statsBtn) {
+    statsBtn.style.display = 'inline-block';
+  };
 }
 
+  statsBtn?.addEventListener('click', () => {
+    window.location.href = 'statistics.html';
+  });
 
   checkBtn.addEventListener('click', () => {
     if (!currentQuizCard) return;

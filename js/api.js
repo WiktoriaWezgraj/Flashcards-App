@@ -1,7 +1,7 @@
 export async function fetchTranslation(word) {
   try {
     const res = await fetch(
-      `https://api.mymemory.translated.net/get?q=${word}&langpair=en|pl`
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
     );
     if (!res.ok) throw new Error('Błąd sieci');
 

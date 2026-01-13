@@ -3,7 +3,7 @@ export const Storage = {
     const all = JSON.parse(localStorage.getItem('flashcards_users')) || {};
 
     if (!all[username]) {
-      all[username] = { flashcards: [], stats: { correct: 0, wrong: 0, total: 0 } };
+      all[username] = { password: '', flashcards: [], stats: { correct: 0, wrong: 0, total: 0 } };
     }
 
     if (flashcards !== null) {
