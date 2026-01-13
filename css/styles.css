@@ -38,6 +38,12 @@ body {
   transition: 0.3s;
 }
 
+#login-box {
+  background-color: var(--panel);
+  margin: 10px;
+  padding: 20px;
+  border-radius: 20px;
+}
 #app {
   width: 100%;
   max-width: 720px;
